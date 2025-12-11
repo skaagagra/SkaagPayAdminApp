@@ -3,6 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import '../services/auth_service.dart';
 import 'dashboard_screen.dart';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
+
 class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -11,7 +13,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _phoneController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _nameController = TextEditingController(); // New Controller
+  final _nameController = TextEditingController();
   final _authService = AuthService();
   bool _isLoading = false;
 
@@ -22,10 +24,21 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     setState(() => _isLoading = true);
+    
+    // Get FCM Token
+    String? fcmToken;
+    try {
+      fcmToken = await FirebaseMessaging.instance.getToken();
+      print("FCM Token: $fcmToken");
+    } catch (e) {
+      print("Error getting FCM token: $e");
+    }
+
     final success = await _authService.login(
       _phoneController.text,
       _passwordController.text,
       fullName: _nameController.text,
+      fcmToken: fcmToken,
     );
     setState(() => _isLoading = false);
 

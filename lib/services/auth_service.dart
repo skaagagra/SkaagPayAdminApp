@@ -5,14 +5,15 @@ import '../utils/constants.dart';
 class AuthService {
   final Dio _dio = Dio();
 
-  Future<bool> login(String phoneNumber, String password, {String? fullName}) async {
+  Future<bool> login(String phoneNumber, String password, {String? fullName, String? fcmToken}) async {
     try {
       final response = await _dio.post(
         '${AppConstants.baseUrl}${AppConstants.adminLoginEndpoint}',
         data: {
           'phone_number': phoneNumber,
           'password': password,
-          'full_name': fullName, // Optional/Included if needed by backend logs
+          'full_name': fullName,
+          'fcm_token': fcmToken,
         },
       );
 

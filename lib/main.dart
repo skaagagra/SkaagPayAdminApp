@@ -33,6 +33,17 @@ void main() async {
         importance: Importance.high,
       ));
 
+  NotificationSettings settings = await FirebaseMessaging.instance.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
+  print('User granted permission: ${settings.authorizationStatus}');
+
   await FirebaseMessaging.instance.subscribeToTopic('admin_updates');
 
   runApp(SkaagAdminApp());
