@@ -21,7 +21,7 @@ class PlansService {
       final response = await _dio.get(
         '${AppConstants.baseUrl}/api/recharge/plans/',
         queryParameters: operatorId != null ? {'operator_id': operatorId} : null,
-        options: await _getHeaders(),
+        // options: await _getHeaders(),
       );
       return (response.data as List).map((x) => Plan.fromJson(x)).toList();
     } catch (e) {
@@ -71,11 +71,11 @@ class PlansService {
     try {
       final response = await _dio.get(
         '${AppConstants.baseUrl}/api/recharge/operators/',
-        options: await _getHeaders(),
+        // options: await _getHeaders(),
       );
       return (response.data as List).map((x) => Operator.fromJson(x)).toList();
     } catch (e) {
-      throw Exception('Failed to load operators');
+      throw Exception('Failed to load operators: $e');
     }
   }
 }

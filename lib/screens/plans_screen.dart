@@ -3,6 +3,7 @@ import '../models/plan.dart';
 import '../models/operator.dart';
 import '../services/plans_service.dart';
 import '../widgets/manage_plan_dialog.dart';
+import '../utils/constants.dart';
 
 class PlansScreen extends StatefulWidget {
   @override
@@ -15,6 +16,7 @@ class _PlansScreenState extends State<PlansScreen> {
   List<Operator> _operators = [];
   Operator? _selectedOperator;
   bool _isLoading = true;
+  String? _errorMessage;
 
   @override
   void initState() {
@@ -23,28 +25,32 @@ class _PlansScreenState extends State<PlansScreen> {
   }
 
   Future<void> _fetchData() async {
-    setState(() => _isLoading = true);
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
     try {
       final operators = await _plansService.getOperators();
       setState(() => _operators = operators);
-
-      // If no operator selected, select the first one if available to filter initially? 
-      // Or show all. Let's show all initially.
       await _fetchPlans();
     } catch (e) {
-      // Handle error
+      setState(() => _errorMessage = 'Init Error: $e');
     } finally {
       setState(() => _isLoading = false);
     }
   }
 
   Future<void> _fetchPlans() async {
-    setState(() => _isLoading = true);
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
     try {
       final plans = await _plansService.getPlans(operatorId: _selectedOperator?.id);
       setState(() => _plans = plans);
     } catch (e) {
-       // Handle error
+       setState(() => _errorMessage = 'Fetch Error: $e');
+       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
     } finally {
       setState(() => _isLoading = false);
     }
@@ -115,7 +121,23 @@ class _PlansScreenState extends State<PlansScreen> {
             child: _isLoading
                 ? Center(child: CircularProgressIndicator())
                 : _plans.isEmpty
-                    ? Center(child: Text('No plans found.'))
+                    ? Center(child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('No plans found.'),
+                          SizedBox(height: 20),
+                          if (_errorMessage != null)
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text('ERROR: $_errorMessage', style: TextStyle(color: Colors.red, fontSize: 16), textAlign: TextAlign.center),
+                            ),
+                          Text('DEBUG INFO:', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue)),
+                          Text('Base URL: ${AppConstants.baseUrl}'),
+                          Text('Plans Count: ${_plans.length}'),
+                          Text('Operators Count: ${_operators.length}'),
+                          Text('Selected Operator: ${_selectedOperator?.name ?? "None"}'),
+                        ],
+                      ))
                     : ListView.builder(
                         itemCount: _plans.length,
                         itemBuilder: (context, index) {

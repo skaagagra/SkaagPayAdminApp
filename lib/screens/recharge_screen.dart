@@ -126,29 +126,38 @@ class _RechargeScreenState extends State<RechargeScreen> {
                                       children: [
                                           Text('${req.userName} (ID: ${req.userId})', style: TextStyle(fontSize: 12, color: Colors.grey[700])),
                                           SizedBox(height: 4),
-                                          Row(
-                                              children: [
-                                                  Text(req.mobileNumber, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                                                  SizedBox(width: 8),
-                                                  GestureDetector(
-                                                      onTap: () async {
-                                                          await Clipboard.setData(ClipboardData(text: req.mobileNumber));
-                                                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Copied ${req.mobileNumber}')));
-                                                      },
-                                                      child: Icon(Icons.copy, size: 16, color: Colors.grey),
-                                                  )
-                                              ]
-                                          ),
+                                          Text(req.mobileNumber, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                                       ],
                                   ),
                                   subtitle: Text('${req.operator} • ${req.status}'),
-                                  trailing: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Text('₹${req.amount}', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                                      Text(req.createdAt.split('T')[0], style: TextStyle(fontSize: 12, color: Colors.grey)),
-                                    ],
+                                  trailing: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                          // Copy Icon
+                                          GestureDetector(
+                                              onTap: () async {
+                                                  await Clipboard.setData(ClipboardData(text: req.mobileNumber));
+                                                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Copied ${req.mobileNumber}')));
+                                              },
+                                              child: Container(
+                                                  padding: EdgeInsets.all(8),
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.grey.shade200,
+                                                      borderRadius: BorderRadius.circular(8),
+                                                  ),
+                                                  child: Icon(Icons.copy, size: 20, color: Colors.blue[800]),
+                                              ),
+                                          ),
+                                          SizedBox(width: 12),
+                                          Column(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment: CrossAxisAlignment.end,
+                                            children: [
+                                              Text('₹${req.amount}', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                                              Text(req.createdAt.split('T')[0], style: TextStyle(fontSize: 12, color: Colors.grey)),
+                                            ],
+                                          ),
+                                      ],
                                   ),
                                 ),
                               ),
