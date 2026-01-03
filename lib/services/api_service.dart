@@ -106,4 +106,35 @@ class ApiService {
       return false;
     }
   }
+
+  Future<bool> uploadApk({
+    required String versionName,
+    required int versionCode,
+    required String filePath,
+    required String releaseNotes,
+    required bool isForceUpdate,
+  }) async {
+    try {
+      FormData formData = FormData.fromMap({
+        'version_name': versionName,
+        'version_code': versionCode,
+        'release_notes': releaseNotes,
+        'is_force_update': isForceUpdate,
+        'apk_file': await MultipartFile.fromFile(filePath, filename: 'update.apk'),
+      });
+
+      final options = await _getHeaders();
+      options.contentType = 'multipart/form-data';
+
+      await _dio.post(
+        '${AppConstants.baseUrl}/app/upload/',
+        data: formData,
+        options: options,
+      );
+      return true;
+    } catch (e) {
+      debugPrint('Upload error: $e');
+      return false;
+    }
+  }
 }

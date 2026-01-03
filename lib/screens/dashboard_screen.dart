@@ -7,6 +7,7 @@ import 'topup_screen.dart';
 import 'recharge_screen.dart';
 import 'users_screen.dart';
 import 'plans_screen.dart';
+import 'app_update_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   @override
@@ -116,6 +117,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             () => Navigator.push(context, MaterialPageRoute(builder: (_) => PlansScreen())),
                           ),
                         ),
+                      ],
+                    ),
+                    SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildActionButton(
+                            'Update App',
+                            Icons.system_update,
+                            () => Navigator.push(context, MaterialPageRoute(builder: (_) => UploadUpdateScreen())),
+                          ),
+                        ),
+                        SizedBox(width: 16),
+                        const Spacer(),
                       ],
                     ),
                   ],
