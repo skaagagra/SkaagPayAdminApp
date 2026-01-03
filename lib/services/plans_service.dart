@@ -19,20 +19,20 @@ class PlansService {
   Future<List<Plan>> getPlans({int? operatorId}) async {
     try {
       final response = await _dio.get(
-        '${AppConstants.baseUrl}/api/recharge/plans/',
+        '${AppConstants.baseUrl}/recharge/plans/',
         queryParameters: operatorId != null ? {'operator_id': operatorId} : null,
-        // options: await _getHeaders(),
+        options: await _getHeaders(),
       );
       return (response.data as List).map((x) => Plan.fromJson(x)).toList();
     } catch (e) {
-      throw Exception('Failed to load plans');
+      throw Exception('Failed to load plans: $e');
     }
   }
 
   Future<bool> createPlan(Map<String, dynamic> data) async {
     try {
       await _dio.post(
-        '${AppConstants.baseUrl}/api/recharge/plans/',
+        '${AppConstants.baseUrl}/recharge/plans/',
         data: data,
         options: await _getHeaders(),
       );
@@ -45,7 +45,7 @@ class PlansService {
   Future<bool> updatePlan(int id, Map<String, dynamic> data) async {
     try {
       await _dio.patch(
-        '${AppConstants.baseUrl}/api/recharge/plans/$id/',
+        '${AppConstants.baseUrl}/recharge/plans/$id/',
         data: data,
         options: await _getHeaders(),
       );
@@ -58,7 +58,7 @@ class PlansService {
   Future<bool> deletePlan(int id) async {
     try {
       await _dio.delete(
-        '${AppConstants.baseUrl}/api/recharge/plans/$id/',
+        '${AppConstants.baseUrl}/recharge/plans/$id/',
         options: await _getHeaders(),
       );
       return true;
@@ -70,8 +70,8 @@ class PlansService {
   Future<List<Operator>> getOperators() async {
     try {
       final response = await _dio.get(
-        '${AppConstants.baseUrl}/api/recharge/operators/',
-        // options: await _getHeaders(),
+        '${AppConstants.baseUrl}/recharge/operators/',
+        options: await _getHeaders(),
       );
       return (response.data as List).map((x) => Operator.fromJson(x)).toList();
     } catch (e) {
