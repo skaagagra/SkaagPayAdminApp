@@ -6,6 +6,7 @@ import 'login_screen.dart';
 import 'topup_screen.dart';
 import 'recharge_screen.dart';
 import 'users_screen.dart';
+import 'plans_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   @override
@@ -98,7 +99,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     SizedBox(height: 16),
                     Row(
                       children: [
-                         Expanded(
+                        Expanded(
                           child: _buildActionButton(
                             'View Recharges',
                             Icons.phonelink_ring,
@@ -106,7 +107,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           ),
                         ),
                         SizedBox(width: 16),
-                        Expanded(child: SizedBox()), // Placeholder for alignment
+                        Expanded(
+                          child: _buildActionButton(
+                            'Manage Plans',
+                            Icons.list_alt,
+                            () => Navigator.push(context, MaterialPageRoute(builder: (_) => PlansScreen())),
+                          ),
+                        ),
                       ],
                     ),
                   ],

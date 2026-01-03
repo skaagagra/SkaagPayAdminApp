@@ -56,10 +56,11 @@ class ApiService {
     }
   }
 
-  Future<List<RechargeRequest>> getRechargeRequests() async {
+  Future<List<RechargeRequest>> getRechargeRequests({String? status}) async {
     try {
       final response = await _dio.get(
         '${AppConstants.baseUrl}${AppConstants.adminRechargesEndpoint}',
+        queryParameters: status != null ? {'status': status} : null,
         options: await _getHeaders(),
       );
       return (response.data as List).map((x) => RechargeRequest.fromJson(x)).toList();
